@@ -1,0 +1,45 @@
+﻿@model EmployeeDetailsViewModel
+@{
+    ViewData["Title"] = "Employee details";
+}
+<form id="form" asp-action="UpdateEmployee">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.EmployeeModel.Id"/>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Surname" class="control-label">Фамилия</label>
+        <input asp-for="@Model.EmployeeModel.Surname" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.FirstName" class="control-label">Имя</label>
+        <input asp-for="@Model.EmployeeModel.FirstName" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Patronymic" class="control-label">Отчество</label>
+        <input asp-for="@Model.EmployeeModel.Patronymic" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.DateOfBirth" class="control-label">Дата рождения</label>
+        <input type="date" asp-for="@Model.DateOfBirth" class="form-control" required max="@DateTime.Today.AddYears(-18)"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DocSeries" class="control-label">Серия паспорта</label>
+        <input asp-for="@Model.EmployeeModel.DocSeries" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DocNumber" class="control-label">Номер паспорта</label>
+        <input asp-for="@Model.EmployeeModel.DocNumber" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Position" class="control-label">Должность</label>
+        <input asp-for="@Model.EmployeeModel.Position" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DepartmentId" class="control-label">Отдел</label>
+        <select asp-for="@Model.EmployeeModel.DepartmentId" asp-items="Model.IdDepartmentGrouping" class="form-control" required>
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" value="Update" class="btn btn-primary"> Update</button>
+    </div>
+</form>
+<a asp-action="DeleteEmployee" asp-route-id="@Model.EmployeeModel.Id">Delete</a>

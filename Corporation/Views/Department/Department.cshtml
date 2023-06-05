@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Department";
+}
+
+@model  DepartmentViewModel
+@foreach (var item in Model.GroupedDepartments)
+{
+    <h2>@Model.Departments.FirstOrDefault(department => department.Id == item.Key)?.Name</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Department id
+            </th>
+            <th>
+                Parent department id
+            </th>
+            <th>
+                Code
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (var department in item)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => department.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => department.ParentDepartmentId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => department.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => department.Name)
+                </td>
+                <td>
+                    <a asp-action="GetDepartment" asp-route-id="@department.Id">Details</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

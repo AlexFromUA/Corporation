@@ -1,0 +1,45 @@
+﻿@model EmployeeCreateViewModel
+@{
+    ViewData["Title"] = "Create employee";
+}
+
+<form asp-action="CreateEmployee">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.EmployeeModel.Id"/>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Surname" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.Surname" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.FirstName" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.FirstName" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Patronymic" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.Patronymic" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DateOfBirth" class="control-label"></label>
+        <input type="date" asp-for="@Model.EmployeeModel.DateOfBirth" class="form-control" required max="@DateTime.Today.AddYears(-18)"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DocSeries" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.DocSeries" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DocNumber" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.DocNumber" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.Position" class="control-label"></label>
+        <input asp-for="@Model.EmployeeModel.Position" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.EmployeeModel.DepartmentId" class="control-label"></label>
+        <select asp-for="@Model.EmployeeModel.DepartmentId" asp-items="Model.IdDepartmentGrouping" class="form-control" required>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary"/>
+    </div>
+</form>
