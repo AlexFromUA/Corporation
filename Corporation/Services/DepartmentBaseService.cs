@@ -4,16 +4,20 @@ using Microsoft.Data.SqlClient;
 
 namespace Corporation.Services;
 
-public class DepartmentService : Service, IDepartmentService
+public class DepartmentBaseService : BaseService, IDepartmentService
 {
-    private List<DepartmentModel> departments;
-    private bool hasChanges = true;
+    private List<DepartmentModel>? _departments;
+    private bool _hasChanges = true;
 
+    public DepartmentBaseService(IConfiguration configuration) : base(configuration)
+    {
+    }
+    
     public async Task<List<DepartmentModel>> GetDepartments()
     {
-        if (hasChanges || departments == null)
+        if (_hasChanges || _departments == null)
         {
-            departments = new List<DepartmentModel>();
+            _departments = new List<DepartmentModel>();
 
             string queryString = "SELECT * from dbo.Department;";
             await using (SqlConnection connection = new SqlConnection(connectionString))
@@ -34,7 +38,7 @@ public class DepartmentService : Service, IDepartmentService
                             Name = reader[1].ToString()!
                         };
 
-                        departments.Add(department);
+                        _departments.Add(department);
                     }
 
                     reader.Close();
@@ -45,22 +49,22 @@ public class DepartmentService : Service, IDepartmentService
                 }
             }
 
-            hasChanges = false;
+            _hasChanges = false;
         }
 
-        return departments;
+        return _departments;
     }
 
     public async Task<DepartmentModel> GetDepartment(string departmentId)
     {
         DepartmentModel department = null;
 
-        if (departments == null)
+        if (_departments == null)
         {
             await GetDepartments();
         }
 
-        department = departments.SingleOrDefault(e => e.Id == departmentId);
+        department = _departments.SingleOrDefault(e => e.Id == departmentId);
 
         return department;
     }

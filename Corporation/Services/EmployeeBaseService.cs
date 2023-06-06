@@ -4,16 +4,20 @@ using Microsoft.Data.SqlClient;
 
 namespace Corporation.Services;
 
-public class EmployeeService : Service, IEmployeeService
+public class EmployeeBaseService : BaseService, IEmployeeService
 {
-    private List<EmployeeModel> employees;
-    private bool hasChanges = true;
+    private List<EmployeeModel>? _employees;
+    private bool _hasChanges = true;
+    
+    public EmployeeBaseService(IConfiguration configuration) : base(configuration)
+    {
+    }
 
     public async Task<List<EmployeeModel>> GetEmployees()
     {
-        if (hasChanges || employees == null)
+        if (_hasChanges || _employees == null)
         {
-            employees = new List<EmployeeModel>();
+            _employees = new List<EmployeeModel>();
 
             string queryString = "SELECT * from dbo.Empoyee;";
             await using (SqlConnection connection = new SqlConnection(connectionString))
@@ -39,7 +43,7 @@ public class EmployeeService : Service, IEmployeeService
                             Position = reader[7].ToString()!,
                             Age = (int)((DateTime.Now - Convert.ToDateTime(reader[4])).TotalDays / 365.242199)
                         };
-                        employees.Add(employee);
+                        _employees.Add(employee);
                     }
 
                     reader.Close();
@@ -50,21 +54,21 @@ public class EmployeeService : Service, IEmployeeService
                 }
             }
 
-            hasChanges = false;
+            _hasChanges = false;
         }
 
-        return employees;
+        return _employees;
     }
 
     public async Task<EmployeeModel> GetEmployee(int employeeId)
     {
         EmployeeModel employee = null;
-        if (employees == null)
+        if (_employees == null)
         {
             await GetEmployees();
         }
 
-        employee = employees.SingleOrDefault(e => e.Id == employeeId);
+        employee = _employees.SingleOrDefault(e => e.Id == employeeId);
 
         return employee;
     }
@@ -96,7 +100,7 @@ public class EmployeeService : Service, IEmployeeService
                 Console.WriteLine(ex.Message);
             }
 
-            hasChanges = true;
+            _hasChanges = true;
         }
     }
 
@@ -128,7 +132,7 @@ public class EmployeeService : Service, IEmployeeService
                 Console.WriteLine(ex.Message);
             }
 
-            hasChanges = true;
+            _hasChanges = true;
         }
     }
 
@@ -150,7 +154,7 @@ public class EmployeeService : Service, IEmployeeService
                 Console.WriteLine(ex.Message);
             }
 
-            hasChanges = true;
+            _hasChanges = true;
         }
     }
 }
